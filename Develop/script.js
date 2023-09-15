@@ -1,121 +1,57 @@
-// Assignment Code
+// Function to generate a random password
+function generatePassword() {
+  // Define character sets for password generation
+  const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+  const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numericChars = '0123456789';
+  const specialChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+
+  // Prompt the user for password length
+  let passwordLength = parseInt(prompt('Enter the password length (between 8 and 128 characters):'));
+
+  // Validate password length
+  if (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128) {
+    alert('Please enter a valid password length between 8 and 128 characters.');
+    return ''; // Return an empty string
+  }
+
+  // Prompt the user for character set inclusion
+  let useLowercase = confirm('Include lowercase characters?');
+  let useUppercase = confirm('Include uppercase characters?');
+  let useNumeric = confirm('Include numeric characters?');
+  let useSpecial = confirm('Include special characters?');
+
+  // Validate character set selection
+  if (!useLowercase && !useUppercase && !useNumeric && !useSpecial) {
+    alert('At least one character set must be selected.');
+    return ''; // Return an empty string
+  }
+
+  // Build the character set based on user selections
+  let charset = '';
+  if (useLowercase) charset += lowercaseChars;
+  if (useUppercase) charset += uppercaseChars;
+  if (useNumeric) charset += numericChars;
+  if (useSpecial) charset += specialChars;
+
+  // Generate the password
+  let password = '';
+  for (let i = 0; i < passwordLength; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset.charAt(randomIndex);
+  }
+
+  return password;
+}
+
+// Get references to the #generate element and #password element
 var generateBtn = document.querySelector("#generate");
+var passwordText = document.querySelector("#password");
 
-var passwordCriteria = {
-	length: "",
-	lowercase: "",
-	uppercase: "",
-	numeric: "",
-	specialCharacters: ""
-};
-
-var characterTypes = function() {
-// include lowercase letters prompt
-	passwordCriteria.lowercase = window.prompt("Do you want to include lowercase characters? Answer yes or no.");
-	passwordCriteria.lowercase = passwordCriteria.lowercase.toLowerCase();
-	if (passwordCriteria.lowercase === "yes") {
-		window.alert("You have chosen to include lowercase characters.");
-		passwordCriteria.lowercase = true;
-	}
-
-// include numeric characters prompt
-	passwordCriteria.numeric = window.prompt("Do you want to include numeric characters? Answer yes or no.");
-	passwordCriteria.numeric = passwordCriteria.numeric.toLowerCase();
-	if (passwordCriteria.numeric === "yes") {
-		window.alert("You have chosen to include numeric characters.");
-		passwordCriteria.numeric = true;
-	}
-	else if (passwordCriteria.numeric === "no") {
-		window.alert("You have chosen not to include numeric characters.");
-		passwordCriteria.numeric = false;
-	}
-
-// include uppercase characters prompt
-passwordCriteria.uppercase = window.prompt("Do you want to include uppercase characters? Answer yes or no.");
-passwordCriteria.uppercase = passwordCriteria.uppercase.toLowerCase();
-if (passwordCriteria.uppercase === "yes") {
-  window.alert("You have chosen to include uppercase characters.");
-  passwordCriteria.uppercase = true;
-}
-else if (passwordCriteria.uppercase === "no") {
-  window.alert("You have chosen not to include uppercase characters.");
-  passwordCriteria.uppercase = false;
-}
-
-// include special characters prompt
-passwordCriteria.specialCharacters = window.prompt("Do you want to include special characters? Answer yes or no.");
-passwordCriteria.specialCharacters = passwordCriteria.specialCharacters.toLowerCase();
-if (passwordCriteria.specialCharacters === "yes") {
-  window.alert("You have chosen to include special characters.");
-  passwordCriteria.specialCharacters = true;
-}
-else if (passwordCriteria.specialCharacters === "no") {
-  window.alert("You have chosen not to include special characters.");
-  passwordCriteria.specialCharacters = false;
-}
-if (passwordCriteria.lowercase === false && 
-  passwordCriteria.uppercase === false && 
-  passwordCriteria.numeric === false && 
-  passwordCriteria.specialCharacters === false) {
-  window.alert("You need to pick at least one character type.");
-  characterTypes();
-}
-};
-
-// prompt password generator
-var generatePassword = function() {
-	// prompt forpassword length
-	passwordCriteria.length = window.prompt("Choose the length of the password (at least 8 characters and no more than 128).");
-	// changes string from passwordLength prompt to an integer
-	passwordCriteria.length = parseInt(passwordCriteria.length);
-	// asks user to enter valid length
-	if (passwordCriteria.length < 8 || passwordCriteria.length > 128) {
-		window.alert("You did not enter a valid length. Please try again.");
-		generatePassword();
-	}
-	else {
-		window.alert("You have entered a length of " + passwordCriteria.length + ".");
-	}
-
-	window.alert("What character types do you want to use? Choose at least one.");
-
-	characterTypes();
-
-	window.alert("Generating password.");
-
-	function makePassword() {
-		var characters = "";
-		if (passwordCriteria.lowercase === true) {
-			characters = "abcdefghijklmnopqrstuvwxyz";
-		}
-		if (passwordCriteria.uppercase === true) {
-			characters = characters + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		}
-		if (passwordCriteria.numeric === true) {
-			characters = characters + "0123456789";
-		}
-		if (passwordCriteria.specialCharacters === true) {
-			characters = characters + "!#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-		}
-		var result = "";
-		var length = passwordCriteria.length;
-		for (var i = 0, n = characters.length; i < length; i++) {
-			result += characters.charAt(Math.floor(Math.random() * n));
-		}
-		window.alert("Your new password is " + result);
-		return result;
-	}
-	
-	makePassword();
-};
-
-// Write password to the #password input
+// Function to write the generated password to the #password element
 function writePassword() {
   var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
